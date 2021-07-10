@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>todo list</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="https://kit.fontawesome.com/db184c2112.js" crossorigin="anonymous"></script>
+  <script defer src="js/todo.js"></script>
+</head>
+
+<body>
+  <section class="wrapper">
+    <form class="add-form">
+      <div>
+        <label for="addInput" class="a11y-hidden">할 일 내용</label>
+        <input type="text" class="add-input" id="addInput" required />
+        <button type="submit" class="add-btn">Add</button>
+      </div>
+    </form>
+
+    <ul class="todo-list__all">
+      <!-- incomplte(할 일) -->
+      <!-- <li class="todo-incomplete">
+        <label>
+          ddd
+          <input type="checkbox"/>
+          <i class="fas fa-times"></i>
+        </label>
+      </li> -->
+
+      <!-- complted(완료) -->
+      <!--<li class="todo-completed">
+        <label>
+          ddd
+          <input type="checkbox" id="" class="checkbox" />
+          <i class="fas fa-check"></i>
+        </label>
+      </li>  -->
+    </ul>
+
+    <ui class="todo-list__complete">
+
+    </ui>
+
+    <div class="btn-group">
+      <button type="button" class="all-btn">All</button>
+      <button type="button" class="complete-btn">Complete</button>
+      <button type="button" class="incomplete-btn">Incomplete</button>
+    </div>
+  </section>
+</body>
+
+</html>

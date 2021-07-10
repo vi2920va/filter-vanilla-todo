@@ -1,0 +1,129 @@
+@charset "utf-8";
+
+*{
+  box-sizing: border-box;
+}
+
+body{
+  overflow: scroll;
+  background: rgb(152, 250, 168, 1);
+}
+
+.wrapper{
+  width: 21.88rem;
+  padding: 1.25rem;
+  margin: 9.375rem auto;
+  border-radius: 0.625rem;
+  background: #fff;
+  color: #fff;
+}
+
+.add-form > div{
+  display: flex;
+  justify-content: space-around;
+}
+
+.add-input{
+  width: calc(100% - 115px);
+  height: 1.75rem;
+  padding: 0.1875rem 0.625rem;
+  line-height: 1.75rem;
+  border:1px solid rgb(194, 190, 190);
+  border-radius: 0.9375rem;
+  font-size: 0.9375rem;
+}
+
+input:hover{
+  outline: none;
+}
+
+.add-btn{
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #4fc08d;
+  border-radius: 0.9375rem;
+  color: #4fc08d;
+}
+
+ul.todo-list__all{
+  min-height: 6.25rem;
+}
+.todo-list__complete{
+  min-height: 6.25rem;
+}
+.todo-list__all li label, .todo-list__complete li label{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 1.125rem 1.563rem 1.125rem;
+  font-size: 1rem;
+}
+
+.todo-list__all li:first-child, .todo-list__complete li:first-child{
+  margin-top: 1.25rem;
+}
+
+.todo-incomplete label{
+  color: #4fc08d
+}
+
+.todo-incomplete label:hover{
+  border-bottom: 1px solid #4fc08d;
+} 
+
+.todo-completed label{
+  color: lightgreen;
+}
+
+.todo-completed label:hover{
+  border-bottom: 1px solid lightgreen;
+}
+
+input[type="checkbox"]{
+  display: none;
+}  
+
+label > input[type="checkbox"] +i{
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  border-radius: 50%;
+  font-size: 0.8125rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+label > input[type="checkbox"] + .fa-times {
+  border: 1px solid #4fc08d;
+}
+
+
+label > input[type="checkbox"] + .fa-times:hover {
+  background: #4fc08d;
+  color: #fff;
+}
+
+label > input[type="checkbox"] + .fa-check {
+  border: 1px solid lightgreen;
+}
+
+label > input[type="checkbox"] + .fa-check:hover{
+  background: lightgreen;
+  color:#fff;
+}
+
+.btn-group{
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-group button{
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #4fc08d;
+  border-radius: 0.9375rem;
+  color: #4fc08d;
+}
+
+button:hover, button:focus{
+  background: #4fc08d;
+  color: #fff;
+}
+
