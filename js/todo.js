@@ -6,7 +6,7 @@ const wrapper = document.querySelector('.wrapper');
 const add_input = document.querySelector('.add-input');
 const todo_list_all = document.querySelector('.todo-list__all');
 const todo_list_complete = document.querySelector('.todo-list__complete');
-
+const todo_list_incomplete = document.querySelector('.todo-list__incomplete');
 // 1. 초기화 실행
 function init() {
   addEvent();
@@ -80,6 +80,7 @@ function addEvent() {
     let li, id, item, todo, list;
     if (e.target.className === 'add-btn' || e.key === 'Enter') {
       addFormSubmit();
+      // 수정중
     } else if (e.target.className === 'fas fa-times') {
       list = [...todos];
       li = e.target.parentNode.parentNode;
@@ -101,38 +102,61 @@ function addEvent() {
       todos = list;
       compledTodo(id);
       saveTodoList();
-      // 수정중
     } else if (e.target.className === 'complete-btn') {
-      filterTodo();
-      // 수정중
+      todo_list_incomplete.style.display = 'none';
+      completeFilter();
     } else if (e.target.className === 'all-btn') {
       todo_list_all.style.display = 'block';
       todo_list_complete.style.display = 'none';
+      todo_list_incomplete.style.display = 'none';
+    } else if (e.target.className.includes('incomplete-btn')) {
+      todo_list_complete.style.display = 'none';
+      todo_list_incomplete.style.display = 'block';
+      impleteFilter();
     }
   });
 }
-// 수정중
-function filterTodo() {
+
+// 미완료 버튼 누르면 미완료된 아이템을 보여준다.
+function impleteFilter() {
+  todo_list_all.style.display = 'none';
+  let list = todos.filter((todo) => !todo.isCompleted);
+
+  let result = list
+    .map((todo) => {
+      return `<li class="todo-incomplete" id=${todo.id}>
+        <label>
+          ${todo.content}
+          <input type="checkbox" value=${todo.isCompleted} />
+          <i class="fas fa-times" aria-hidden="true"></i>
+        </label>
+      </li>`;
+    })
+    .reverse()
+    .join('');
+  todo_list_incomplete.innerHTML = result;
+}
+
+// 완료 버튼을 누르면 완료된 아이템을 보여준다.
+function completeFilter() {
   todo_list_all.style.display = 'none';
   todo_list_complete.style.display = 'block';
-  let rs = todos.filter((todo) => todo.isCompleted);
-  rs.map((todo) => {
-    let li = document.createElement('li');
-    li.setAttribute('class', 'todo-completed');
-    li.setAttribute('id', todo.id);
-    let label = document.createElement('label');
-    let text = document.createTextNode(todo.content);
-    let input = document.createElement('input');
-    let icon = document.createElement('i');
-    input.setAttribute('type', 'checkbox');
-    input.setAttribute('value', todo.isCompleted);
-    icon.setAttribute('class', 'fas fa-times');
-    label.append(text);
-    label.append(input);
-    label.append(icon);
-    li.append(label);
-    return todo_list_complete.append(li);
-  });
+  let list = todos.filter((todo) => todo.isCompleted);
+
+  let result = list
+    .map((todo) => {
+      return `
+      <li class="todo-completed" id=${todo.id}>
+        <label>
+          ${todo.content}
+          <input type="checkbox" value=${todo.isCompleted} />
+          <i class="fas fa-check" aria-hidden="true"></i>
+        </label>
+      </li>`;
+    })
+    .reverse()
+    .join('');
+  todo_list_complete.innerHTML = result;
 }
 
 // 3. form 유효성 검사

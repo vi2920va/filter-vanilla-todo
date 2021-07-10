@@ -44,20 +44,18 @@ input:hover{
   color: #4fc08d;
 }
 
-ul.todo-list__all{
+ul.todo-list__all, ul.todo-list__complete, ul.todo-list__incomplete{
   min-height: 6.25rem;
 }
-.todo-list__complete{
-  min-height: 6.25rem;
-}
-.todo-list__all li label, .todo-list__complete li label{
+
+.todo-list__all li label, .todo-list__complete li label, .todo-list__incomplete li label{
   display: flex;
   justify-content: space-between;
   margin: 0 1.125rem 1.563rem 1.125rem;
   font-size: 1rem;
 }
 
-.todo-list__all li:first-child, .todo-list__complete li:first-child{
+.todo-list__all li:first-child, .todo-list__complete li:first-child, .todo-list__incomplete li:first-child{
   margin-top: 1.25rem;
 }
 
