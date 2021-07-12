@@ -1,16 +1,18 @@
 @charset "utf-8";
 
-*{
+* {
   box-sizing: border-box;
 }
 
-body{
+body {
   overflow: scroll;
   background: rgb(152, 250, 168, 1);
 }
 
-.wrapper{
+.wrapper {
+  position: relative;
   width: 21.88rem;
+  min-height: 18.25rem;
   padding: 1.25rem;
   margin: 9.375rem auto;
   border-radius: 0.625rem;
@@ -18,110 +20,115 @@ body{
   color: #fff;
 }
 
-.add-form > div{
+.add-form > div {
   display: flex;
   justify-content: space-around;
 }
 
-.add-input{
+.add-input {
   width: calc(100% - 115px);
   height: 1.75rem;
   padding: 0.1875rem 0.625rem;
   line-height: 1.75rem;
-  border:1px solid rgb(194, 190, 190);
+  border: 1px solid rgb(194, 190, 190);
   border-radius: 0.9375rem;
   font-size: 0.9375rem;
 }
 
-input:hover{
+input:hover {
   outline: none;
 }
 
-.add-btn{
+.add-btn {
   padding: 0.5rem 1.25rem;
   border: 1px solid #4fc08d;
   border-radius: 0.9375rem;
   color: #4fc08d;
 }
 
-ul.todo-list__all, ul.todo-list__complete, ul.todo-list__incomplete{
-  min-height: 6.25rem;
-}
-
-.todo-list__all li label, .todo-list__complete li label, .todo-list__incomplete li label{
+.todo-list__all li,
+.todo-list__complete li,
+.todo-list__incomplete li {
   display: flex;
   justify-content: space-between;
   margin: 0 1.125rem 1.563rem 1.125rem;
   font-size: 1rem;
 }
 
-.todo-list__all li:first-child, .todo-list__complete li:first-child, .todo-list__incomplete li:first-child{
+.todo-list__all li:first-child,
+.todo-list__complete li:first-child,
+.todo-list__incomplete li:first-child {
   margin-top: 1.25rem;
 }
 
-.todo-incomplete label{
-  color: #4fc08d
+li.todo-incomplete label {
+  color: #4fc08d;
 }
 
-.todo-incomplete label:hover{
+li.todo-incomplete label:hover {
   border-bottom: 1px solid #4fc08d;
-} 
+}
 
-.todo-completed label{
+li.todo-complete label {
   color: lightgreen;
 }
 
-.todo-completed label:hover{
+li.todo-complete label:hover {
   border-bottom: 1px solid lightgreen;
 }
 
-input[type="checkbox"]{
+input[type="checkbox"] {
   display: none;
-}  
+}
 
-label > input[type="checkbox"] +i{
+li button {
   width: 1.5rem;
   height: 1.5rem;
   line-height: 1.5rem;
+  border: 1px solid #4fc08d;
   border-radius: 50%;
   font-size: 0.8125rem;
   text-align: center;
+  color: #4fc08d;
   cursor: pointer;
 }
 
-label > input[type="checkbox"] + .fa-times {
-  border: 1px solid #4fc08d;
-}
-
-
-label > input[type="checkbox"] + .fa-times:hover {
+li button.deleBtn:hover {
   background: #4fc08d;
   color: #fff;
 }
 
-label > input[type="checkbox"] + .fa-check {
+li button.checkBtn {
+  color: lightgreen;
   border: 1px solid lightgreen;
 }
 
-label > input[type="checkbox"] + .fa-check:hover{
+li button.checkBtn:hover {
   background: lightgreen;
-  color:#fff;
+  color: #fff;
 }
 
-.btn-group{
+.btn-group {
+  position: absolute;
+  bottom: 0.625rem;
   display: flex;
   justify-content: space-around;
 }
 
-.btn-group button{
+.btn-group button {
+  margin-left: 0.625rem;
   padding: 0.5rem 1.5rem;
   border: 1px solid #4fc08d;
   border-radius: 0.9375rem;
   color: #4fc08d;
 }
 
-button:hover, button:focus{
+.btn-group button:first-child {
+  margin-left: 0;
+}
+
+button:hover,
+button:focus {
   background: #4fc08d;
   color: #fff;
 }
-
