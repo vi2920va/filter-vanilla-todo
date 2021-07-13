@@ -11,12 +11,12 @@ const todo_list_incomplete = document.querySelector('.todo-list__incomplete');
 // 1. 초기화 실행.
 function init() {
   addEvent();
-  loadTodoList();
-  renderTodo();
+  loadTodos();
+  render();
 }
 
 // 5. 로컬 스토리지에서 데이터를 조회.
-function loadTodoList() {
+function loadTodos() {
   if (loaded_todos !== null) {
     todos = JSON.parse(loaded_todos);
     return todos;
@@ -24,17 +24,24 @@ function loadTodoList() {
 }
 
 // 6. 추가, 수정, 삭제 이벤트를 할 때 화면을 다시 그리기.
-function renderTodo() {
+function render() {
   let list, join;
   list = [...todos].reverse();
-  join = list.map(templeateTodo).join('');
+  join = list.map(itemTemplate).join('');
   todo_list_all.innerHTML = join;
 }
 
-// 7. 아이템을 완료 여부 상태에 따라서 맞는 li를 요소를 만들기.
-function templeateTodo(todo) {
-  return `
-    <li class=${todo.isCompleted ? 'todo-complete' : 'todo-incomplete'}>
+// 7. 리스트에 아이템을 추가하기 전 템플릿을 초기화.
+function blankTemplate() {
+  todo_list_all.innerHTML = '';
+  todo_list_incomplete.innerHTML = '';
+  todo_list_complete.innerHTML = '';
+}
+
+// 8. 아이템을 완료 여부 상태에 따라서 맞는 li를 요소를 만들기.
+function itemTemplate(todo) {
+  blankTemplate();
+  return `<li class=${todo.isCompleted ? 'todo-complete' : 'todo-incomplete'}>
         <input type="checkbox" id=${todo.id} value=${todo.isCompleted}>    
         <label for=${todo.id} class=${
     todo.isCompleted ? 'complete__item--content' : 'incomplete__item--content'
@@ -48,15 +55,15 @@ function templeateTodo(todo) {
     </li>`;
 }
 
-// 2. 이벤트 위임
+// 2. 이벤트 위임.
 function addEvent() {
+  // 2-1. 사용자가 클릭 또는 키보드를 눌렀을 때 이벤트 발생.
   wrapper.addEventListener('click' || 'keydown', (e) => {
-    // event listener
     let ul, li, list, item, todo, index, id;
-    // 2-1. add-form 안에서 add-btn 버튼을 누르거나 Enter 버튼을 누르면 추가.
+    // 2-1-1. add-form 안에서 add-btn 버튼을 누르거나 Enter 버튼을 누르면 추가.
     if (e.target.className === 'add-btn' || e.key === 'Enter') {
       addFormSubmit();
-      // 2-2. 삭제 아이콘을 누르면 미완료 목록에 있는 아이템을 삭제.
+      // 2-1-2. 삭제 아이콘을 누르면 미완료 목록에 있는 아이템을 삭제.
     } else if (e.target.className.includes('fa-times')) {
       list = [...todos];
       ul = e.target.parentNode.parentNode.parentNode;
@@ -66,8 +73,8 @@ function addEvent() {
       list.splice(index, 1);
       todos = list;
       ul.removeChild(li);
-      saveTodoList();
-      // 2-3. 체크 아이콘을 누르면 완료 상태에 있는 아이템을 다시 미완료 상태로 변경.
+      saveTodos();
+      // 2-1-3. 체크 아이콘을 누르면 완료 상태에 있는 아이템을 다시 미완료 상태로 변경.
     } else if (e.target.className.includes('fa-check')) {
       list = [...todos];
       li = e.target.parentNode.parentNode;
@@ -77,9 +84,9 @@ function addEvent() {
       item.isCompleted = !item.isCompleted;
       list.splice(index, 0);
       todos = list;
-      renderTodo();
-      saveTodoList();
-      // 2-4. 미완료 아이템의 콘텐츠 내용을 누르면 완료 상태로 변경.
+      saveTodos();
+      render();
+      // 2-1-4. 미완료 아이템의 콘텐츠 내용을 누르면 완료 상태로 변경.
     } else if (e.target.className.includes('incomplete__item--content')) {
       list = [...todos];
       id = Number(e.target.getAttribute('for'));
@@ -88,9 +95,9 @@ function addEvent() {
       item.isCompleted = !item.isCompleted;
       list.splice(index, 0);
       todos = list;
-      saveTodoList();
-      renderTodo();
-      // 2-5. 완료 아이템의 콘텐츠를 내용을 누르면 미완료 상태로 변경.
+      saveTodos();
+      render();
+      // 2-1-5. 완료 아이템의 콘텐츠를 내용을 누르면 미완료 상태로 변경.
     } else if (e.target.className.includes('complete__item--content')) {
       list = [...todos];
       id = Number(e.target.getAttribute('for'));
@@ -99,17 +106,17 @@ function addEvent() {
       item.isCompleted = !item.isCompleted;
       list.splice(index, 0);
       todos = list;
-      saveTodoList();
-      renderTodo();
-      // 2-6. all 버튼 누르면 아이템 전부를 보여준다.(수정중)
+      saveTodos();
+      render();
+      // 2-1-6. all 버튼 누르면 아이템 전부를 보여준다.
     } else if (e.target.className.includes('all-btn')) {
-      renderTodo();
-      // 2-7. icomplete 버튼을 누르면 미완료 상태의 아이템만 보여준다.
+      render();
+      // 2-1-7. icomplete 버튼을 누르면 미완료 상태의 아이템만 보여준다.
     } else if (e.target.className.includes('incomplete-btn')) {
-      impleteFilter();
-      // 2-8. complete 버튼을 누르면 완료 상태의 아이템만 보여준다.
+      incompleteItem();
+      // 2-1-8. complete 버튼을 누르면 완료 상태의 아이템만 보여준다.
     } else if (e.target.className.includes('complete-btn')) {
-      completeFilter();
+      completedItem();
     }
   });
 }
@@ -124,53 +131,63 @@ function incomplete(id, item) {
 }
 
 // 2-7. 미완료 상태의 아이템만 보여준다.
-function impleteFilter() {
-  todo_list_all.innerHTML = '';
-  todo_list_complete.innerHTML = '';
-  let list = todos.filter((todo) => !todo.isCompleted);
+function incompleteItem() {
+  blankTemplate();
 
-  let result = list
-    .map((todo) => {
-      return `
-        <li class="todo-incomplete" id=${todo.id}>
-          <input type="checkbox" id="${todo.id}" value="${todo.isCompleted}">    
-          <label for="${todo.id}">${todo.content}</label>
-          <button class="deleteBtn">
-            <i class="fas fa-times"></i>
-            <span class="a11y-hidden">삭제</span>
+  let list, item, join;
+  list = [...todos].reverse();
+  item = list.filter(incompleteFilter);
+  join = item.map(incompleteTemplate);
+  todo_list_incomplete.innerHTML = join;
+}
+
+// 2-7-1. 아이템의 상태가 미완료 여부 필터.
+function incompleteFilter(todo) {
+  return !todo.isCompleted;
+}
+
+// 2-7-2. 미완료된 아이템의 템플릿.
+function incompleteTemplate(todo) {
+  return `
+    <li class="todo-incomplete" id=${todo.id}>
+      <input type="checkbox" id="${todo.id}" value="${todo.isCompleted}">
+      <label for="${todo.id}">${todo.content}</label>
+        <button class="deleteBtn">
+          <i class="fas fa-times"></i>
+          <span class="a11y-hidden">삭제</span>
           </button>
-        </li>
+          </li>
           `;
-    })
-    .reverse()
-    .join('');
-  todo_list_incomplete.innerHTML = result;
 }
 
 // 2-8. 완료 상태의 아이템만 보여준다.
-function completeFilter() {
-  todo_list_all.innerHTML = '';
-  todo_list_incomplete.innerHTML = '';
-  let list = todos.filter((todo) => todo.isCompleted);
-
-  let result = list
-    .map((todo) => {
-      return `
-        <li class="todo-complete" id=${todo.id}>
-          <input type="checkbox" id=${todo.id} value=${todo.isCompleted}>    
-          <label for="${todo.id}" class="complete__item--content">${todo.content}</label>
-          <button class="checkBtn">
-            <i class="fas fa-check"></i>
-            <span class="a11y-hidden">체크</span>
-          </button>
-        </li>`;
-    })
-    .reverse()
-    .join('');
-  todo_list_complete.innerHTML = result;
+function completedItem() {
+  let list, item, join;
+  blankTemplate();
+  list = [...todos].reverse();
+  item = list.filter(completeFilter);
+  join = item.map(completeTemplate);
+  todo_list_complete.innerHTML = join;
 }
 
-// 3. form 유효성 검사
+// 2-8-1. 아이템의 상태가 완료 여부 필터.
+function completeFilter(todo) {
+  return todo.isCompleted;
+}
+// 2-8-2. 미완료 아이템의 템플릿.
+function completeTemplate(todo) {
+  return `
+  <li class="todo-complete" id=${todo.id}>
+    <input type="checkbox" id=${todo.id} value=${todo.isCompleted}>
+    <label for="${todo.id}" class="complete__item--content">${todo.content}</label
+      <button class="checkBtn">
+        <i class="fas fa-check"></i>
+          <span class="a11y-hidden">체크</span>
+      </button>
+  </li>`;
+}
+
+// 3. form 유효성 검사.
 function addFormSubmit() {
   let value = add_input.value;
 
@@ -188,8 +205,8 @@ function addTodoItem(value) {
     content: value,
     isCompleted: false,
   });
-  saveTodoList();
-  renderTodo();
+  saveTodos();
+  render();
 }
 
 // 2. 클릭한 대상과 아이템이 일치하는지 검사.
@@ -198,7 +215,7 @@ function matchingID(id, item) {
 }
 
 // 5. 로컬 스토리지 데이터 저장
-function saveTodoList() {
+function saveTodos() {
   localStorage.setItem('TODOS', JSON.stringify(todos));
 }
 

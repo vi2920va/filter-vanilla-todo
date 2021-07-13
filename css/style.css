@@ -61,6 +61,12 @@ input:hover {
   margin-top: 1.25rem;
 }
 
+.todo-list__all li:last-child,
+.todo-list__complete li:last-child,
+.todo-list__incomplete li:last-child {
+  margin-bottom: 3.25rem;
+}
+
 li.todo-incomplete label {
   color: #4fc08d;
 }
