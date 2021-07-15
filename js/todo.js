@@ -25,6 +25,7 @@ function loadTodos() {
 
 // 6. 추가, 수정, 삭제 이벤트를 할 때 화면을 다시 그리기.
 function render() {
+  blankTemplate();
   let list, join;
   list = [...todos].reverse();
   join = list.map(itemTemplate).join('');
@@ -40,10 +41,11 @@ function blankTemplate() {
 
 // 8. 아이템을 완료 여부 상태에 따라서 맞는 li를 요소를 만들기.
 function itemTemplate(todo) {
-  blankTemplate();
   return `<li class=${todo.isCompleted ? 'todo-complete' : 'todo-incomplete'}>
-        <input type="checkbox" id=${todo.id} value=${todo.isCompleted}>    
-        <label for=${todo.id} class=${
+        <input type="checkbox" id="${todo.id}" value=${todo.isCompleted} ${
+    todo.isCompleted ? 'checked' : 'unchecked'
+  }>    
+        <label for="${todo.id}" class=${
     todo.isCompleted ? 'complete__item--content' : 'incomplete__item--content'
   }>${todo.content}</label>
         <button type="button" class=${
@@ -59,21 +61,25 @@ function itemTemplate(todo) {
 function addEvent() {
   // 2-1. 사용자가 클릭 또는 키보드를 눌렀을 때 이벤트 발생.
   wrapper.addEventListener('click' || 'keydown', (e) => {
-    let ul, li, list, item, todo, index, id;
+    let li, list, item, todo, index, id;
+    let checkbox;
     // 2-1-1. add-form 안에서 add-btn 버튼을 누르거나 Enter 버튼을 누르면 추가.
     if (e.target.className === 'add-btn' || e.key === 'Enter') {
-      addFormSubmit();
+      addFormSubmit(e);
       // 2-1-2. 삭제 아이콘을 누르면 미완료 목록에 있는 아이템을 삭제.
-    } else if (e.target.className.includes('fa-times')) {
+    } else if (
+      e.target.className.includes('deleteBtn') ||
+      e.target.className.includes('fa-times')
+    ) {
       list = [...todos];
-      ul = e.target.parentNode.parentNode.parentNode;
+      const ul = e.target.parentNode.parentNode.parentNode;
       li = e.target.parentNode.parentNode;
       id = Number(li.id);
       index = list.findIndex(matchingID.bind(todo, id));
       list.splice(index, 1);
       todos = list;
-      ul.removeChild(li);
       saveTodos();
+      render();
       // 2-1-3. 체크 아이콘을 누르면 완료 상태에 있는 아이템을 다시 미완료 상태로 변경.
     } else if (e.target.className.includes('fa-check')) {
       list = [...todos];
@@ -137,7 +143,7 @@ function incompleteItem() {
   let list, item, join;
   list = [...todos].reverse();
   item = list.filter(incompleteFilter);
-  join = item.map(incompleteTemplate);
+  join = item.map(incompleteTemplate).join('');
   todo_list_incomplete.innerHTML = join;
 }
 
@@ -149,8 +155,10 @@ function incompleteFilter(todo) {
 // 2-7-2. 미완료된 아이템의 템플릿.
 function incompleteTemplate(todo) {
   return `
-    <li class="todo-incomplete" id=${todo.id}>
-      <input type="checkbox" id="${todo.id}" value="${todo.isCompleted}">
+    <li class="todo-incomplete" id="${todo.id}">
+      <input type="checkbox" id="${todo.id}" value="${todo.isCompleted}" ${
+    todo.isCompleted ? 'checked' : 'unchecked'
+  }>
       <label for="${todo.id}">${todo.content}</label>
         <button class="deleteBtn">
           <i class="fas fa-times"></i>
@@ -166,7 +174,7 @@ function completedItem() {
   blankTemplate();
   list = [...todos].reverse();
   item = list.filter(completeFilter);
-  join = item.map(completeTemplate);
+  join = item.map(completeTemplate).join('');
   todo_list_complete.innerHTML = join;
 }
 
@@ -174,12 +182,17 @@ function completedItem() {
 function completeFilter(todo) {
   return todo.isCompleted;
 }
+
 // 2-8-2. 미완료 아이템의 템플릿.
 function completeTemplate(todo) {
   return `
   <li class="todo-complete" id=${todo.id}>
-    <input type="checkbox" id=${todo.id} value=${todo.isCompleted}>
-    <label for="${todo.id}" class="complete__item--content">${todo.content}</label
+    <input type="checkbox" id=${todo.id} value=${todo.isCompleted} ${
+    todo.isCompleted ? 'checked' : 'unchecked'
+  }>
+    <label for="${todo.id}" class="complete__item--content">${
+    todo.content
+  }</label>
       <button class="checkBtn">
         <i class="fas fa-check"></i>
           <span class="a11y-hidden">체크</span>
@@ -188,14 +201,16 @@ function completeTemplate(todo) {
 }
 
 // 3. form 유효성 검사.
-function addFormSubmit() {
-  let value = add_input.value;
+function addFormSubmit(e) {
+  e.preventDefault();
 
-  if (value === '') {
-    return false;
+  if (add_input.value === '') {
+    return add_input.setAttribute('required', false);
   }
-  addTodoItem(value);
-  value = '';
+
+  addTodoItem(add_input.value);
+  add_input.setAttribute('required', true);
+  add_input.value = '';
 }
 
 // 4. 아이템 추가

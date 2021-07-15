@@ -35,6 +35,15 @@ body {
   font-size: 0.9375rem;
 }
 
+.add-input:focus{
+  border: 1px solid #4fc08d;
+  outline: none;
+}
+
+.add-input[required = false]{
+  border:  1px solid red;
+}
+
 input:hover {
   outline: none;
 }
@@ -49,6 +58,7 @@ input:hover {
 .todo-list__all li,
 .todo-list__complete li,
 .todo-list__incomplete li {
+  position: relative;
   display: flex;
   justify-content: space-between;
   margin: 0 1.125rem 1.563rem 1.125rem;
@@ -83,8 +93,42 @@ li.todo-complete label:hover {
   border-bottom: 1px solid lightgreen;
 }
 
-input[type="checkbox"] {
-  display: none;
+li input[type="checkbox"]{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.9375rem;
+  height: 0.9375rem;
+}
+
+li input[type="checkbox"] + label{
+  display: inline-block;
+  position: relative;
+  padding-left: 1.875rem;
+}
+
+li input[type="checkbox"] + label::before{
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.9375rem;
+  height: 0.9375rem;
+  line-height: 0.9375rem;
+  border: 1px solid #4fc08d;
+  border-radius: 0.125rem;
+  background: #fff;
+  content: "";
+} 
+
+li input[type="checkbox"]:checked + label::before{
+  font-size: 1.063rem;
+  line-height: 1.063rem;
+  text-align: center;
+  font-weight: 800;
+  background: #4fc08d;
+  color: #fff;
+  content: "\2713";
 }
 
 li button {
