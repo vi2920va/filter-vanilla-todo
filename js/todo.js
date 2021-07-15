@@ -62,7 +62,6 @@ function addEvent() {
   // 2-1. 사용자가 클릭 또는 키보드를 눌렀을 때 이벤트 발생.
   wrapper.addEventListener('click' || 'keydown', (e) => {
     let li, list, item, todo, index, id;
-    let checkbox;
     // 2-1-1. add-form 안에서 add-btn 버튼을 누르거나 Enter 버튼을 누르면 추가.
     if (e.target.className === 'add-btn' || e.key === 'Enter') {
       addFormSubmit(e);
@@ -72,7 +71,6 @@ function addEvent() {
       e.target.className.includes('fa-times')
     ) {
       list = [...todos];
-      const ul = e.target.parentNode.parentNode.parentNode;
       li = e.target.parentNode.parentNode;
       id = Number(li.id);
       index = list.findIndex(matchingID.bind(todo, id));
