@@ -185,3 +185,7 @@ button:focus {
   background: #4fc08d;
   color: #fff;
 }
+
+i{
+  pointer-events: none;
+}
